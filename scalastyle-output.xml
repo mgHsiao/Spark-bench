@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.0">
+ <file name="D:\workspace\spark-bench\src\main\scala\cn\nsccgz\spark\bench\utils\BaseRangePartioner.scala">
+  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="error" message="Header does not match expected text"></error>
+ </file>
+ <file name="D:\workspace\spark-bench\src\main\scala\cn\nsccgz\spark\bench\utils\IOCommon.scala">
+  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="error" message="Header does not match expected text"></error>
+  <error line="19" source="org.scalastyle.file.FileLineLengthChecker" severity="error" message="File line length exceeds 100 characters"></error>
+  <error source="org.scalastyle.file.NewLineAtEofChecker" severity="error" message="File must end with newline character"></error>
+ </file>
+ <file name="D:\workspace\spark-bench\src\main\scala\cn\nsccgz\spark\bench\ScalaWordCount.scala">
+  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="error" message="Header does not match expected text"></error>
+  <error source="org.scalastyle.file.NewLineAtEofChecker" severity="error" message="File must end with newline character"></error>
+ </file>
+</checkstyle>

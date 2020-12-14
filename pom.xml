@@ -1,0 +1,322 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>cn.cnssgz.spark</groupId>
+  <artifactId>spark-bench</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <!-- <packaging>pom</packaging> -->
+
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.version>3.6.3</maven.version>
+    <encoding>UTF-8</encoding>
+    <scala.version>2.12.0</scala.version>
+    <scala.binary.version>2.12</scala.binary.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <log4j.version>1.2.17</log4j.version>
+    <scopt.version>3.5.0</scopt.version>
+    <mahout.version>0.9</mahout.version>
+    <uncommons-maths.version>1.2.2a</uncommons-maths.version>
+    <junit.version>3.8.1</junit.version>
+    <spark.version>3.0.0</spark.version>
+    <!-- <hadoop.version>2.7.7</hadoop.version> -->
+    <hadoop.version>3.2.1</hadoop.version>
+    <hadoop.mr3.version>3.2.1</hadoop.mr3.version>
+    <hadoop.mr2.version>2.7.7</hadoop.mr2.version>
+    <hadoop.mr1.version>1.2.1</hadoop.mr1.version>
+    <scala-maven-plugin.version>3.2.1</scala-maven-plugin.version>
+    <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+    <maven-assembly-plugin.version>2.5.3</maven-assembly-plugin.version>
+    <maven-jar-plugin.version>2.3.2</maven-jar-plugin.version>
+    <build-helper-maven-plugin.version>1.9.1</build-helper-maven-plugin.version>
+    <download-maven-plugin.version>1.2.0</download-maven-plugin.version>
+  </properties>
+
+
+
+
+  <build>
+    
+    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>scala-maven-plugin</artifactId>
+          <version>${scala-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly-plugin.version}</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <configuration>
+          <scalaCompatVersion>${scala.binary.version}</scalaCompatVersion>
+          <scalaVersion>${scala.version}</scalaVersion>
+        </configuration>
+        <executions>
+          <execution>
+            <id>scala-compile-first</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-source</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>scala-test-compile</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- <profiles>
+    <profile>
+      <id>defaultSpark</id>
+      <properties>
+        <spark.version>2.4.5</spark.version>
+        <spark.bin.version>2.4</spark.bin.version>
+      </properties>
+      <activation>
+        <property>
+          <name>!spark</name>
+        </property>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>spark3.0</id>
+      <properties>
+        <spark.version>3.0.0</spark.version>
+        <spark.bin.version>3.0</spark.bin.version>
+      </properties>
+      <activation>
+        <property>
+          <name>!spark</name>
+        </property>
+      </activation>
+    </profile>
+
+
+
+
+    <profile>
+      <id>spark2.0</id>
+      <properties>
+        <spark.version>2.0.0</spark.version>
+        <spark.bin.version>2.0</spark.bin.version>
+      </properties>
+      <activation>
+        <property>
+          <name>spark</name>
+          <value>2.0</value>
+        </property>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>spark2.4</id>
+      <properties>
+        <spark.version>2.4.0</spark.version>
+        <spark.bin.version>2.4</spark.bin.version>
+      </properties>
+      <activation>
+        <property>
+          <name>spark</name>
+          <value>2.4</value>
+        </property>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>spark2.2</id>
+      <properties>
+        <spark.version>2.2.0</spark.version>
+        <spark.bin.version>2.2</spark.bin.version>
+      </properties>
+      <activation>
+        <property>
+          <name>spark</name>
+          <value>2.2</value>
+        </property>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>spark2.3</id>
+      <properties>
+        <spark.version>2.3.0</spark.version>
+        <spark.bin.version>2.3</spark.bin.version>
+      </properties>
+      <activation>
+        <property>
+          <name>spark</name>
+          <value>2.3</value>
+        </property>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>defaultScalaVersion</id>
+      <properties>
+          <scala.version>2.11.12</scala.version>
+          <scala.binary.version>2.11</scala.binary.version>
+      </properties>
+      <activation>
+        <property>
+          <name>!scala</name>
+        </property>
+      </activation>
+    </profile>
+
+   
+    <profile>
+      <id>scala2.11</id>
+      <properties>
+        <scala.version>2.11.12</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
+      </properties>
+      <activation>
+        <property>
+          <name>scala</name>
+          <value>2.11</value>
+        </property>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>scala2.12</id>
+      <properties>
+        <scala.version>2.12.0</scala.version>
+        <scala.binary.version>2.12</scala.binary.version>
+      </properties>
+      <activation>
+        <property>
+          <name>scala</name>
+          <value>2.12</value>
+        </property>
+      </activation>
+    </profile>
+
+  </profiles> -->
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <version>${spark.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-mllib_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>${hadoop.mr3.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-mapreduce-examples</artifactId>
+        <version>${hadoop.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>com.github.scopt</groupId>
+        <artifactId>scopt_${scala.binary.version}</artifactId>
+        <version>${scopt.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>com.github.fommil.netlib</groupId>
+        <artifactId>core</artifactId>
+        <version>1.1.2</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.mahout</groupId>
+        <artifactId>mahout-core</artifactId>
+        <version>0.9</version>
+    </dependency>
+    <dependency>
+        <groupId>it.unimi.dsi</groupId>
+        <artifactId>fastutil</artifactId>
+        <version>8.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-hive_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+        <scope>provided</scope>
+    </dependency>
+        
+
+
+  </dependencies>
+
+</project>
